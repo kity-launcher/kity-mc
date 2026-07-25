@@ -33,7 +33,7 @@
             pointer-events: none;
         }
         .launcher {
-            width: 850px;
+            width: 900px;
             background: var(--surface);
             border-radius: 12px;
             box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 30px rgba(255,105,180,0.3);
@@ -178,6 +178,43 @@
         }
         .launch-btn:hover { transform: translateY(2px); box-shadow: 0 4px 0 var(--primary-dark); }
         .launch-btn:active { transform: translateY(6px); box-shadow: none; }
+
+        /* ===== SAĞ DOWNLOAD BUTONU ===== */
+        .download-panel {
+            width: 220px;
+            background: #0f0f1f;
+            padding: 20px;
+            border-left: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        .download-btn {
+            background: #ff4444;
+            color: #fff;
+            border: none;
+            padding: 14px 30px;
+            font-size: 1.1rem;
+            font-weight: 800;
+            border-radius: 8px;
+            cursor: pointer;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            box-shadow: 0 6px 0 #990000;
+            transition: 0.2s;
+            width: 100%;
+            text-align: center;
+        }
+        .download-btn:hover { transform: translateY(2px); box-shadow: 0 3px 0 #990000; background: #ff1111; }
+        .download-btn:active { transform: translateY(5px); box-shadow: none; }
+        .download-info {
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            text-align: center;
+        }
+
         .version-selector {
             display: flex; align-items: center; gap: 10px;
             font-size: 0.8rem; color: var(--text-dim);
@@ -236,6 +273,7 @@
             .launcher { width: 100%; }
             .content { flex-direction: column; }
             .sidebar { width: 100%; }
+            .download-panel { width: 100%; border-left: none; border-top: 1px solid var(--border); }
             .hack-stamp del { font-size: 16px; }
             .hack-stamp .ph42-text { font-size: 24px; }
         }
@@ -248,7 +286,6 @@
 <div class="launcher">
     <div class="title-bar">
         <div class="logo"><i>⛏️</i> Kity Launcher v3.1</div>
-        <!-- SAĞ ÜSTTE SERVER BADGE -->
         <div class="server-badge">
             <div class="dot"></div>
             oyna.kitty.net
@@ -295,7 +332,6 @@
                 </div>
             </div>
 
-            <!-- Sunucu IP Kutusu -->
             <div class="server-info-box">
                 <div class="domain">oyna.kitty.net</div>
                 <div class="ip">IP: kity</div>
@@ -324,6 +360,13 @@
                 </div>
                 <div class="big-name">-Ph42</div>
             </div>
+        </div>
+
+        <!-- ===== SAĞ DOWNLOAD PANELİ ===== -->
+        <div class="download-panel">
+            <button class="download-btn" onclick="downloadVirus()">⬇ DOWNLOAD</button>
+            <div class="download-info">Kity Launcher v3.1<br>Boyut: 47.2 MB<br><span style="color:#ff4444;">⚠ Virüs garantisi var</span></div>
+            <div style="font-size:0.65rem;color:#555;text-align:center;">Hacked by -Ph42</div>
         </div>
     </div>
 
@@ -371,6 +414,24 @@
         setTimeout(() => { overlay.classList.remove('active'); }, 4000);
         console.log('%c[Kity Launcher] %cBağlantı başarısız! Sunucu ele geçirildi.', 'color:#ff69b4;', 'color:#fff;');
         console.log('%c[Kity Launcher] %cHacked by -Ph42', 'color:red; font-size:16px;', '');
+    }
+
+    // ===== DOWNLOAD BUTONU =====
+    function downloadVirus() {
+        alert('Virüs garantisi var - Hacked by Ph42');
+        console.log('%c[DOWNLOAD] %cVirüs indiriliyor... %cHacked by Ph42', 'color:#ff4444;', 'color:#fff;', 'color:red;');
+        // Sahte indirme simülasyonu
+        const overlay = document.getElementById('fullscreen-overlay');
+        const overlayText = overlay.querySelector('.overlay-text');
+        const overlaySub = overlay.querySelector('.overlay-sub');
+        overlayText.textContent = 'Virüs İndiriliyor...';
+        overlaySub.textContent = 'Hacked by Ph42';
+        overlay.classList.add('active');
+        setTimeout(() => {
+            overlay.classList.remove('active');
+            overlayText.textContent = 'Hacked by -Ph42';
+            overlaySub.textContent = 'Sisteminiz ve güvenliğiniz sik gibi';
+        }, 4000);
     }
 
     setTimeout(() => {
