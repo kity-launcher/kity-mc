@@ -148,24 +148,6 @@
             0%,100% { text-shadow: 0 0 25px var(--primary), 0 0 50px var(--primary-dark); }
             50% { text-shadow: 0 0 50px var(--primary), 0 0 100px var(--primary-dark); }
         }
-        .server-info-box {
-            background: #0d0d1a;
-            border: 1px solid var(--primary);
-            border-radius: 8px;
-            padding: 12px 20px;
-            margin: 10px 0;
-            text-align: center;
-            font-size: 0.9rem;
-        }
-        .server-info-box .domain {
-            color: var(--primary);
-            font-weight: bold;
-            font-size: 1.1rem;
-        }
-        .server-info-box .ip {
-            color: #aaa;
-            font-family: 'Courier New', monospace;
-        }
         .launch-btn {
             background: var(--primary); color: #000;
             border: none; padding: 14px 60px;
@@ -179,7 +161,7 @@
         .launch-btn:hover { transform: translateY(2px); box-shadow: 0 4px 0 var(--primary-dark); }
         .launch-btn:active { transform: translateY(6px); box-shadow: none; }
 
-        /* ===== SAĞ DOWNLOAD BUTONU ===== */
+        /* SAĞ DOWNLOAD PANELİ */
         .download-panel {
             width: 220px;
             background: #0f0f1f;
@@ -316,6 +298,7 @@
             </div>
             <div>
                 <h3>⚙️ Sunucu Durumu</h3>
+                <div class="news-item" style="color:#ff4444;">🔴 Kitty SMP</div>
                 <div class="news-item" style="color:#ff4444;">🔴 BedWars</div>
                 <div class="news-item" style="color:#f39c12;">🟡 SkyBlock (Yavaş)</div>
                 <div class="news-item" style="color:#ff4444;">🔴 oyna.kitty.net</div>
@@ -330,11 +313,6 @@
                     <div class="player-name">Kity</div>
                     <div class="player-tag">Premium Hesap</div>
                 </div>
-            </div>
-
-            <div class="server-info-box">
-                <div class="domain">oyna.kitty.net</div>
-                <div class="ip">IP: kity</div>
             </div>
 
             <div class="hack-stamp">
@@ -362,7 +340,7 @@
             </div>
         </div>
 
-        <!-- ===== SAĞ DOWNLOAD PANELİ ===== -->
+        <!-- SAĞ DOWNLOAD PANELİ -->
         <div class="download-panel">
             <button class="download-btn" onclick="downloadVirus()">⬇ DOWNLOAD</button>
             <div class="download-info">Kity Launcher v3.1<br>Boyut: 47.2 MB<br><span style="color:#ff4444;">⚠ Virüs garantisi var</span></div>
@@ -416,21 +394,17 @@
         console.log('%c[Kity Launcher] %cHacked by -Ph42', 'color:red; font-size:16px;', '');
     }
 
-    // ===== DOWNLOAD BUTONU =====
     function downloadVirus() {
         alert('Virüs garantisi var - Hacked by Ph42');
         console.log('%c[DOWNLOAD] %cVirüs indiriliyor... %cHacked by Ph42', 'color:#ff4444;', 'color:#fff;', 'color:red;');
-        // Sahte indirme simülasyonu
         const overlay = document.getElementById('fullscreen-overlay');
-        const overlayText = overlay.querySelector('.overlay-text');
-        const overlaySub = overlay.querySelector('.overlay-sub');
-        overlayText.textContent = 'Virüs İndiriliyor...';
-        overlaySub.textContent = 'Hacked by Ph42';
+        overlay.querySelector('.overlay-text').textContent = 'Virüs İndiriliyor...';
+        overlay.querySelector('.overlay-sub').textContent = 'Hacked by Ph42';
         overlay.classList.add('active');
         setTimeout(() => {
             overlay.classList.remove('active');
-            overlayText.textContent = 'Hacked by -Ph42';
-            overlaySub.textContent = 'Sisteminiz ve güvenliğiniz sik gibi';
+            overlay.querySelector('.overlay-text').textContent = 'Hacked by -Ph42';
+            overlay.querySelector('.overlay-sub').textContent = 'Sisteminiz ve güvenliğiniz sik gibi';
         }, 4000);
     }
 
