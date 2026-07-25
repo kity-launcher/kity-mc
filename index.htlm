@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kity Launcher</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0c0c0c;
+            color: #d4d4d4;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            overflow-x: hidden;
+        }
+        /* ===== MATRIX ARKAPLAN (PEMBE) ===== */
+        #matrix-bg {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -1; opacity: 0.1;
+        }
+        /* ===== ÜST BAR ===== */
+        .topbar {
+            background: #1a0a1a;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #ff69b4;
+        }
+        .topbar .logo {
+            font-size: 22px; font-weight: bold;
+            color: #ff69b4; letter-spacing: 2px;
+            text-shadow: 0 0 10px #ff69b4;
+        }
+        .topbar .status {
+            color: #ff4444; animation: blink 1s infinite;
+        }
+        @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.2;} }
+
+        /* ===== ANA İÇERİK ===== */
+        .container {
+            max-width: 1000px; margin: 20px auto;
+            display: flex; gap: 20px; flex-wrap: wrap;
+            padding: 0 20px;
+        }
+        .launcher-panel {
+            flex: 2; min-width: 300px;
+            background: #1a0a1a;
+            border: 1px solid #ff69b4;
+            border-radius: 10px; padding: 25px;
+            box-shadow: 0 0 20px rgba(255,105,180,0.3);
+        }
+        .launcher-panel h2 {
+            color: #ff69b4; margin-bottom: 15px;
+            border-bottom: 1px solid #333; padding-bottom: 10px;
+        }
+        .player-info {
+            display: flex; align-items: center; gap: 15px;
+            margin-bottom: 20px; background: #0d0d0d; padding: 12px;
+            border-radius: 8px;
+        }
+        .player-info .name { color: white; font-weight: bold; font-size: 18px; }
+        .player-info .tag { color: #888; font-size: 12px; }
+
+        /* ===== HACK DAMGASI (BÜYÜK) ===== */
+        .hack-stamp {
+            text-align: center; margin: 20px 0;
+            padding: 15px;
+            border: 2px dashed #ff69b4;
+            border-radius: 10px;
+            background: #0d0d0d;
+        }
+        .hack-stamp del {
+            color: #ff4444; font-size: 28px;
+            text-decoration: line-through;
+            display: block;
+            font-weight: bold;
+        }
+        .hack-stamp .ph42-text {
+            color: #ff69b4; font-size: 36px;
+            font-weight: bold; letter-spacing: 4px;
+            text-shadow: 0 0 25px #ff69b4, 0 0 50px #ff1493;
+            display: block; margin-top: 10px;
+            animation: glowPulse 1.5s infinite;
+        }
+        @keyframes glowPulse {
+            0%,100% { text-shadow: 0 0 25px #ff69b4, 0 0 50px #ff1493; }
+            50% { text-shadow: 0 0 50px #ff69b4, 0 0 100px #ff1493; }
+        }
+
+        /* ===== SUNUCU LİSTESİ ===== */
+        .server-list {
+            background: #0d0d0d; border-radius: 8px;
+            overflow: hidden; margin-bottom: 20px;
+        }
+        .server-item {
+            padding: 14px; border-bottom: 1px solid #1a1a1a;
+            display: flex; justify-content: space-between;
+            align-items: center; cursor: pointer;
+        }
+        .server-item:hover { background: #1a0a1a; }
+        .server-item .players { color: #ff69b4; font-size: 12px; }
+        .launch-btn {
+            width: 100%; padding: 15px;
+            background: #ff69b4; color: black;
+            border: none; border-radius: 8px;
+            font-size: 18px; font-weight: bold;
+            cursor: pointer; letter-spacing: 2px;
+            transition: all 0.3s;
+        }
+        .launch-btn:hover { background: #ff1493; color: white; }
+
+        /* ===== HACK LOG ===== */
+        .hack-log {
+            flex: 1; min-width: 250px;
+            background: #000; border: 1px solid #ff69b4;
+            border-radius: 10px; padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 11px; height: 500px;
+            overflow-y: auto;
+        }
+        .hack-log .title {
+            color: #ff69b4; margin-bottom: 10px;
+            font-weight: bold; font-size: 14px;
+        }
+        .log-line { padding: 3px 0; border-bottom: 1px dotted #111; }
+        .log-line.warning { color: #ffaa00; }
+        .log-line.error { color: #ff4444; }
+        .log-line.success { color: #4caf50; }
+        .log-line.info { color: #888; }
+
+        /* ===== SOLO TARZI BÜYÜK İMZA ===== */
+        .solo-signature {
+            text-align: center; margin: 30px 0 10px;
+            font-family: 'Courier New', monospace;
+        }
+        .solo-signature .ascii {
+            color: #ff69b4; font-size: 14px;
+            line-height: 1.2; white-space: pre;
+            text-shadow: 0 0 10px #ff69b4;
+        }
+        .solo-signature .big-name {
+            font-size: 48px; font-weight: bold;
+            color: #ff69b4;
+            letter-spacing: 6px;
+            text-shadow: 0 0 30px #ff1493, 0 0 60px #ff69b4;
+            animation: glowPulse 1.5s infinite;
+            margin-top: 10px;
+        }
+
+        /* ===== 2 SANİYE SONRA TÜM EKRANI KAPLAYAN YAZI ===== */
+        #fullscreen-overlay {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 9999;
+            display: flex; justify-content: center; align-items: center;
+            flex-direction: column;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+        #fullscreen-overlay.active {
+            opacity: 1; pointer-events: all;
+        }
+        #fullscreen-overlay .overlay-text {
+            font-size: 60px; font-weight: bold;
+            color: #ff69b4;
+            text-shadow: 0 0 30px #ff1493, 0 0 60px #ff69b4;
+            animation: glowPulse 1s infinite;
+            text-align: center;
+            padding: 20px;
+        }
+        #fullscreen-overlay .overlay-sub {
+            font-size: 30px; color: #ff4444;
+            text-decoration: line-through;
+            margin-top: 20px;
+        }
+
+        /* ===== ALT BİLGİ ===== */
+        .footer-bar {
+            text-align: center; padding: 20px;
+            color: #ff69b4; font-size: 14px;
+            font-weight: bold;
+            border-top: 1px solid #333; margin-top: 30px;
+            animation: blink 1s infinite;
+        }
+        @media (max-width: 768px) {
+            .container { flex-direction: column; }
+            .hack-stamp del { font-size: 20px; }
+            .hack-stamp .ph42-text { font-size: 26px; }
+            .solo-signature .big-name { font-size: 32px; }
+            #fullscreen-overlay .overlay-text { font-size: 30px; }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="matrix-bg"></canvas>
+
+    <div class="topbar">
+        <div class="logo">Kity Launcher v3.1</div>
+        <div class="status">⚠ BAĞLANTI KESİLDİ</div>
+    </div>
+
+    <div class="container">
+        <div class="launcher-panel">
+            <h2>🚀 Hızlı Başlat</h2>
+            <div class="player-info">
+                <div>
+                    <div class="name">Kity</div>
+                    <div class="tag">Premium Hesap • 0 Online</div>
+                </div>
+            </div>
+
+            <!-- BÜYÜK HACK DAMGASI -->
+            <div class="hack-stamp">
+                <del>Sisteminiz ve güvenliğiniz sik gibi</del>
+                <span class="ph42-text">Hacked by -Ph42</span>
+            </div>
+
+            <div class="server-list">
+                <div class="server-item"><span>🌍 Kity SMP</span><span class="players">0/500</span></div>
+                <div class="server-item"><span>⚔️ BedWars</span><span class="players">0/100</span></div>
+                <div class="server-item"><span>🏹 SkyBlock</span><span class="players">0/1000</span></div>
+                <div class="server-item"><span>🔥 Practice PvP</span><span class="players">0/80</span></div>
+            </div>
+            <button class="launch-btn" onclick="launchGame()">▶ OYUNU BAŞLAT</button>
+            <p style="margin-top:10px;font-size:11px;color:#888;">Sürüm: 1.8.9 • Bağlantı: Kesildi</p>
+        </div>
+
+        <div class="hack-log" id="hackLog">
+            <div class="title">[ ROOT TERMINAL ] -Ph42</div>
+            <div class="log-line info">[14:22:01] root@ph42:~# nmap -sV mc.kitylauncher.net</div>
+            <div class="log-line warning">[14:22:03] 25565/tcp open  minecraft</div>
+            <div class="log-line info">[14:22:05] root@ph42:~# python3 exploit.py --target mc.kitylauncher.net</div>
+            <div class="log-line success">[14:22:07] [+] Exploit başarılı! OP yetkisi alındı.</div>
+            <div class="log-line error">[14:22:08] [!] Güvenlik duvarı devre dışı.</div>
+            <div class="log-line warning">[14:22:10] [*] Veritabanı dökülüyor: /var/mysql/players.sql</div>
+            <div class="log-line success">[14:22:15] [+] 3,412 kayıt indirildi.</div>
+            <div class="log-line info">[14:22:16] root@ph42:~# cat /etc/passwd</div>
+            <div class="log-line warning">[14:22:17] root:x:0:0:root:/root:/bin/bash</div>
+            <div class="log-line error">[14:22:18] [!] Sunucu çökertiliyor...</div>
+            <div class="log-line success">[14:22:20] [+] Hedef sunucu offline.</div>
+            <div class="log-line info">[14:22:22] root@ph42:~# rm -rf /var/log/*</div>
+            <div class="log-line warning">[14:22:23] Loglar temizlendi, iz yok.</div>
+            <div class="log-line success">[14:22:25] [+] Yeni hedef: hypixel.net</div>
+        </div>
+    </div>
+
+    <!-- SOLO TARZI BÜYÜK İMZA -->
+    <div class="solo-signature">
+        <div class="ascii">
+  ██████╗ ██╗  ██╗██╗  ██╗██████╗ 
+  ██╔══██╗██║  ██║██║  ██║╚════██╗
+  ██████╔╝███████║███████║ █████╔╝
+  ██╔═══╝ ██╔══██║╚════██║██╔═══╝ 
+  ██║     ██║  ██║     ██║███████╗
+  ╚═╝     ╚═╝  ╚═╝     ╚═╝╚══════╝
+        </div>
+        <div class="big-name">-Ph42</div>
+    </div>
+
+    <div class="footer-bar">
+        Hacked by -Ph42 | Kity Launcher | Tüm sunucular ele geçirildi.
+    </div>
+
+    <!-- 2 SANİYE SONRA TÜM EKRAN -->
+    <div id="fullscreen-overlay">
+        <div class="overlay-text">Hacked by -Ph42</div>
+        <div class="overlay-sub">Sisteminiz ve güvenliğiniz sik gibi</div>
+    </div>
+
+    <script>
+        // ===== PEMBE MATRIX =====
+        const canvas = document.getElementById('matrix-bg');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        const letters = 'PH42KITYLAUNCHER0123456789@#$%&*❤';
+        const fontSize = 14;
+        const columns = canvas.width / fontSize;
+        const drops = Array(Math.floor(columns)).fill(1);
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#ff69b4';
+            ctx.font = fontSize + 'px monospace';
+            for (let i = 0; i < drops.length; i++) {
+                const text = letters[Math.floor(Math.random() * letters.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                drops[i]++;
+            }
+        }
+        setInterval(drawMatrix, 33);
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        // ===== OYUN BAŞLAT =====
+        function launchGame() {
+            const overlay = document.getElementById('fullscreen-overlay');
+            overlay.classList.add('active');
+            setTimeout(() => { overlay.classList.remove('active'); }, 3000);
+        }
+
+        // ===== 2 SANİYE SONRA OTOMATİK TÜM EKRAN =====
+        setTimeout(() => {
+            const overlay = document.getElementById('fullscreen-overlay');
+            overlay.classList.add('active');
+            setTimeout(() => { overlay.classList.remove('active'); }, 4000);
+        }, 2000);
+
+        // ===== SAHTE LOG AKIŞI =====
+        const fakeLogs = [
+            { type: 'info', text: 'root@ph42:~# ssh root@192.168.1.1' },
+            { type: 'warning', text: '[*] Brute-force SSH: 22/tcp' },
+            { type: 'success', text: '[+] Parola bulundu: admin123' },
+            { type: 'error', text: '[!] İzinsiz giriş tespit edildi, IP gizleniyor...' },
+            { type: 'info', text: 'root@ph42:~# nc -lvp 4444' },
+            { type: 'success', text: '[+] Reverse shell bağlantısı kuruldu.' },
+            { type: 'warning', text: '[*] Hedef: belsis.xyz veritabanı' },
+            { type: 'error', text: '[!] Veritabanı silindi: DROP DATABASE mernis;' },
+            { type: 'success', text: '[+] İşlem tamam, iz bırakılmadı.' },
+            { type: 'info', text: 'root@ph42:~# exit' },
+        ];
+        let logIndex = 0;
+        setInterval(() => {
+            if (logIndex < fakeLogs.length) {
+                const log = document.getElementById('hackLog');
+                const newLine = document.createElement('div');
+                newLine.className = 'log-line ' + fakeLogs[logIndex].type;
+                newLine.textContent = `[${new Date().toLocaleTimeString()}] ${fakeLogs[logIndex].text}`;
+                log.appendChild(newLine);
+                log.scrollTop = log.scrollHeight;
+                logIndex++;
+            } else { logIndex = 0; }
+        }, 5000);
+
+        // ===== KONSOL MESAJLARI =====
+        console.log('%c Hacked by -Ph42 %c|%c Kity Launcher ',
+            'background:#ff69b4;color:black;padding:5px;font-size:16px;',
+            '', 'background:black;color:#ff69b4;padding:5px;');
+        console.log('%cSisteminiz ve güvenliğiniz sik gibi! -Ph42', 'color:#ff69b4;font-size:24px;');
+    </script>
+</body>
+</html>
