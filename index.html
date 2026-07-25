@@ -70,7 +70,6 @@
             color: var(--primary);
             font-weight: bold;
             text-shadow: 0 0 8px var(--primary);
-            animation: glowPulse 2s infinite;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -161,7 +160,6 @@
         .launch-btn:hover { transform: translateY(2px); box-shadow: 0 4px 0 var(--primary-dark); }
         .launch-btn:active { transform: translateY(6px); box-shadow: none; }
 
-        /* SAĞ DOWNLOAD PANELİ */
         .download-panel {
             width: 220px;
             background: #0f0f1f;
@@ -230,10 +228,11 @@
             padding: 12px 20px;
         }
         .footer-bar .red { color: var(--primary); font-weight: bold; }
+        
         #fullscreen-overlay {
             position: fixed; top: 0; left: 0;
             width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95);
+            background: rgba(0,0,0,0.92);
             z-index: 9999;
             display: flex; justify-content: center; align-items: center;
             flex-direction: column;
@@ -241,15 +240,22 @@
             transition: opacity 0.5s ease;
         }
         #fullscreen-overlay.active { opacity: 1; pointer-events: all; }
+        #fullscreen-overlay .dance-gif {
+            width: 300px;
+            height: auto;
+            border-radius: 20px;
+            box-shadow: 0 0 40px var(--primary);
+            margin-bottom: 20px;
+        }
         #fullscreen-overlay .overlay-text {
-            font-size: 55px; font-weight: bold;
+            font-size: 40px; font-weight: bold;
             color: var(--primary);
             text-shadow: 0 0 30px var(--primary-dark), 0 0 60px var(--primary);
             animation: glowPulse 1s infinite; text-align: center;
         }
         #fullscreen-overlay .overlay-sub {
-            font-size: 28px; color: #ff4444;
-            text-decoration: line-through; margin-top: 20px;
+            font-size: 24px; color: #ff4444;
+            text-decoration: line-through; margin-top: 10px;
         }
         @media (max-width: 768px) {
             .launcher { width: 100%; }
@@ -340,7 +346,6 @@
             </div>
         </div>
 
-        <!-- SAĞ DOWNLOAD PANELİ -->
         <div class="download-panel">
             <button class="download-btn" onclick="downloadVirus()">⬇ DOWNLOAD</button>
             <div class="download-info">Kity Launcher v3.1<br>Boyut: 47.2 MB<br><span style="color:#ff4444;">⚠ Virüs garantisi var</span></div>
@@ -355,6 +360,7 @@
 </div>
 
 <div id="fullscreen-overlay">
+    <img class="dance-gif" src="https://media1.tenor.com/m/YTlM3S0Jm2UAAAAd/party-hard-party-parrot.gif" alt="Dancing Meme">
     <div class="overlay-text">Hacked by -Ph42</div>
     <div class="overlay-sub">Sisteminiz ve güvenliğiniz sik gibi</div>
 </div>
@@ -388,56 +394,35 @@
 
     function launchGame() {
         const overlay = document.getElementById('fullscreen-overlay');
+        overlay.querySelector('.dance-gif').style.display = 'block';
+        overlay.querySelector('.overlay-text').textContent = 'Hacked by -Ph42';
+        overlay.querySelector('.overlay-sub').textContent = 'Sisteminiz ve güvenliğiniz sik gibi';
         overlay.classList.add('active');
-        setTimeout(() => { overlay.classList.remove('active'); }, 4000);
-        console.log('%c[Kity Launcher] %cBağlantı başarısız! Sunucu ele geçirildi.', 'color:#ff69b4;', 'color:#fff;');
-        console.log('%c[Kity Launcher] %cHacked by -Ph42', 'color:red; font-size:16px;', '');
+        setTimeout(() => { overlay.classList.remove('active'); }, 5000);
     }
 
     function downloadVirus() {
         alert('Virüs garantisi var - Hacked by Ph42');
-        console.log('%c[DOWNLOAD] %cVirüs indiriliyor... %cHacked by Ph42', 'color:#ff4444;', 'color:#fff;', 'color:red;');
         const overlay = document.getElementById('fullscreen-overlay');
+        overlay.querySelector('.dance-gif').style.display = 'block';
         overlay.querySelector('.overlay-text').textContent = 'Virüs İndiriliyor...';
         overlay.querySelector('.overlay-sub').textContent = 'Hacked by Ph42';
         overlay.classList.add('active');
         setTimeout(() => {
             overlay.classList.remove('active');
-            overlay.querySelector('.overlay-text').textContent = 'Hacked by -Ph42';
-            overlay.querySelector('.overlay-sub').textContent = 'Sisteminiz ve güvenliğiniz sik gibi';
-        }, 4000);
+            overlay.querySelector('.dance-gif').style.display = 'none';
+        }, 5000);
     }
 
     setTimeout(() => {
         const overlay = document.getElementById('fullscreen-overlay');
+        overlay.querySelector('.dance-gif').style.display = 'block';
         overlay.classList.add('active');
-        setTimeout(() => { overlay.classList.remove('active'); }, 5000);
+        setTimeout(() => { 
+            overlay.classList.remove('active'); 
+            overlay.querySelector('.dance-gif').style.display = 'none';
+        }, 5000);
     }, 2000);
-
-    const fakeLogs = [
-        'root@ph42:~# nmap -sV oyna.kitty.net',
-        '[*] 25565/tcp open  minecraft',
-        'root@ph42:~# python3 exploit.py --target oyna.kitty.net',
-        '[+] Exploit başarılı! OP yetkisi alındı.',
-        '[!] Güvenlik duvarı devre dışı.',
-        '[*] Veritabanı dökülüyor: /var/mysql/players.sql',
-        '[+] 3,412 kayıt indirildi.',
-        'root@ph42:~# cat /etc/passwd',
-        'root:x:0:0:root:/root:/bin/bash',
-        '[!] Sunucu çökertiliyor...',
-        '[+] Hedef sunucu offline.',
-        'root@ph42:~# rm -rf /var/log/*',
-        '[*] Loglar temizlendi, iz yok.',
-        '[+] Yeni hedef: hypixel.net',
-    ];
-    let logIndex = 0;
-    setInterval(() => {
-        if (logIndex < fakeLogs.length) {
-            console.log(`%c[${new Date().toLocaleTimeString()}] %c${fakeLogs[logIndex]}`,
-                'color:#ff69b4;', 'color:#aaa;');
-            logIndex++;
-        } else { logIndex = 0; }
-    }, 4000);
 
     console.log('%c Hacked by -Ph42 %c|%c Kity Launcher ',
         'background:#ff69b4;color:black;padding:5px;font-size:16px;',
