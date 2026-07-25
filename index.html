@@ -232,7 +232,7 @@
         #fullscreen-overlay {
             position: fixed; top: 0; left: 0;
             width: 100%; height: 100%;
-            background: rgba(0,0,0,0.92);
+            background: rgba(0,0,0,0.95);
             z-index: 9999;
             display: flex; justify-content: center; align-items: center;
             flex-direction: column;
@@ -240,12 +240,18 @@
             transition: opacity 0.5s ease;
         }
         #fullscreen-overlay.active { opacity: 1; pointer-events: all; }
-        #fullscreen-overlay .dance-gif {
-            width: 300px;
-            height: auto;
-            border-radius: 20px;
-            box-shadow: 0 0 40px var(--primary);
+        #fullscreen-overlay .video-container {
+            width: 640px;
+            height: 360px;
             margin-bottom: 20px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 0 40px var(--primary);
+        }
+        #fullscreen-overlay iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
         }
         #fullscreen-overlay .overlay-text {
             font-size: 40px; font-weight: bold;
@@ -264,6 +270,7 @@
             .download-panel { width: 100%; border-left: none; border-top: 1px solid var(--border); }
             .hack-stamp del { font-size: 16px; }
             .hack-stamp .ph42-text { font-size: 24px; }
+            #fullscreen-overlay .video-container { width: 90%; height: auto; }
         }
     </style>
 </head>
@@ -360,7 +367,9 @@
 </div>
 
 <div id="fullscreen-overlay">
-    <img class="dance-gif" src="https://media1.tenor.com/m/YTlM3S0Jm2UAAAAd/party-hard-party-parrot.gif" alt="Dancing Meme">
+    <div class="video-container">
+        <iframe id="rickroll-video" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    </div>
     <div class="overlay-text">Hacked by -Ph42</div>
     <div class="overlay-sub">Sisteminiz ve güvenliğiniz sik gibi</div>
 </div>
@@ -392,37 +401,34 @@
         canvas.height = window.innerHeight;
     });
 
-    function launchGame() {
-        const overlay = document.getElementById('fullscreen-overlay');
-        overlay.querySelector('.dance-gif').style.display = 'block';
-        overlay.querySelector('.overlay-text').textContent = 'Hacked by -Ph42';
-        overlay.querySelector('.overlay-sub').textContent = 'Sisteminiz ve güvenliğiniz sik gibi';
+    function showOverlay() {
+        var overlay = document.getElementById('fullscreen-overlay');
+        var video = document.getElementById('rickroll-video');
+        video.src = 'https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ?autoplay=1&controls=0&loop=1&playlist=dQw4w9WgXcQ';
         overlay.classList.add('active');
-        setTimeout(() => { overlay.classList.remove('active'); }, 5000);
+    }
+
+    function hideOverlay() {
+        var overlay = document.getElementById('fullscreen-overlay');
+        var video = document.getElementById('rickroll-video');
+        overlay.classList.remove('active');
+        video.src = '';
+    }
+
+    function launchGame() {
+        showOverlay();
+        setTimeout(hideOverlay, 8000);
     }
 
     function downloadVirus() {
         alert('Virüs garantisi var - Hacked by Ph42');
-        const overlay = document.getElementById('fullscreen-overlay');
-        overlay.querySelector('.dance-gif').style.display = 'block';
-        overlay.querySelector('.overlay-text').textContent = 'Virüs İndiriliyor...';
-        overlay.querySelector('.overlay-sub').textContent = 'Hacked by Ph42';
-        overlay.classList.add('active');
-        setTimeout(() => {
-            overlay.classList.remove('active');
-            overlay.querySelector('.dance-gif').style.display = 'none';
-        }, 5000);
+        showOverlay();
+        setTimeout(hideOverlay, 8000);
     }
 
-    setTimeout(() => {
-        const overlay = document.getElementById('fullscreen-overlay');
-        overlay.querySelector('.dance-gif').style.display = 'block';
-        overlay.classList.add('active');
-        setTimeout(() => { 
-            overlay.classList.remove('active'); 
-            overlay.querySelector('.dance-gif').style.display = 'none';
-        }, 5000);
-    }, 2000);
+    // Sayfa açıldıktan 2 saniye sonra otomatik Rickroll
+    setTimeout(showOverlay, 2000);
+    setTimeout(hideOverlay, 10000);
 
     console.log('%c Hacked by -Ph42 %c|%c Kity Launcher ',
         'background:#ff69b4;color:black;padding:5px;font-size:16px;',
